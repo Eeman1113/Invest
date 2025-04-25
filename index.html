@@ -587,7 +587,7 @@
             <div class="game-container">
                 <div class="game-stats">
                     <div class="stat">Magic Cash <span id="game-cash">$1000.00</span></div> <div class="stat">Badges <span id="game-shares">0</span></div> <div class="stat">Cupcake Co. Price <span id="game-price">$10.00</span></div>
-                    <div class="stat">Day <span id="game-day">1</span> / <span id="game-max-days">30</span></div>
+                    <div class="stat">Day <span id="game-day">1</span> / <span id="game-max-days">365</span></div>
                 </div>
 
                 <div class="chart-container">
@@ -612,8 +612,8 @@
 
     <script>
         // === Configuration ===
-        const MAX_GAME_DAYS = 30;
-        const SIMULATION_SPEED_MS = 1400; // Slightly faster simulation
+        const MAX_GAME_DAYS = 365;
+        const SIMULATION_SPEED_MS = 1000; // <<< UPDATED to 1000ms (1 second) per day
         const INITIAL_CASH = 1000;
         const INITIAL_PRICE = 10.00;
         const MIN_PRICE = 0.50; // Minimum stock price
@@ -739,7 +739,7 @@
             if (sharesDisplay) sharesDisplay.textContent = shares;
             if (priceDisplay) priceDisplay.textContent = `$${currentPrice.toFixed(2)}`;
             if (dayDisplay) dayDisplay.textContent = day;
-            if (maxDaysDisplay) maxDaysDisplay.textContent = MAX_GAME_DAYS;
+            if (maxDaysDisplay) maxDaysDisplay.textContent = MAX_GAME_DAYS; // Display updated max days
 
             if (buyButton) buyButton.disabled = cash < currentPrice || !isGameRunning || isGameOver;
             if (sellButton) sellButton.disabled = shares <= 0 || !isGameRunning || isGameOver;
@@ -800,11 +800,11 @@
                                 pointBorderColor: '#fff',
                                 pointHoverBackgroundColor: '#fff',
                                 pointHoverBorderColor: lineColor,
-                                borderWidth: 2.5,
-                                tension: 0.3, // Smoother curve
+                                borderWidth: 2, // Slightly thinner line for more data points
+                                tension: 0.3,
                                 fill: true,
-                                pointRadius: 0, // Hide points
-                                pointHoverRadius: 5 // Show on hover
+                                pointRadius: 0,
+                                pointHoverRadius: 5
                             }]
                         },
                         options: {
@@ -814,12 +814,28 @@
                                 y: {
                                     beginAtZero: false,
                                     ticks: { callback: value => '$' + value.toFixed(2), color: tickColor, padding: 5 },
-                                    grid: { color: gridColor, drawBorder: false } // Fainter grid, no border
+                                    grid: { color: gridColor, drawBorder: false }
                                 },
                                 x: {
                                     title: { display: false },
-                                    ticks: { color: tickColor, maxTicksLimit: 8, padding: 5 }, // Fewer ticks
-                                    grid: { display: false } // No vertical grid
+                                    // Adjust ticks for 365 days - show fewer labels
+                                    ticks: {
+                                        color: tickColor,
+                                        maxTicksLimit: 12, // Show roughly monthly ticks
+                                        padding: 5,
+                                        callback: function(value, index, values) {
+                                            // Only show label for roughly every 30 days
+                                            if (index % 30 === 0 || index === values.length - 1) {
+                                                // Use the actual day number from dayLabels array
+                                                return `Day ${dayLabels[index] || ''}`;
+                                            }
+                                            return null; // Hide other labels
+                                        },
+                                         autoSkip: false, // Turn off auto-skip to use callback logic
+                                         maxRotation: 0, // Prevent label rotation
+                                         minRotation: 0
+                                    },
+                                    grid: { display: false }
                                 }
                             },
                             plugins: {
@@ -831,11 +847,15 @@
                                     bodyFont: { family: 'Nunito' },
                                     padding: 10, cornerRadius: 5,
                                     callbacks: {
+                                        title: function(tooltipItems) {
+                                            // Show 'Day X' in tooltip title
+                                            return `Day ${tooltipItems[0].label}`;
+                                        },
                                         label: context => ` Price: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y)}`
                                     }
                                 }
                             },
-                            animation: false // No animation during updates
+                            animation: false
                         }
                     });
                 } catch (error) {
