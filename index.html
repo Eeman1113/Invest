@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investing Adventures Game!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* CSS Styles */
+        :root {
+            --bg-color: #fdf6f8; /* Lighter Pink Background */
+            --primary-color: #f4e8fc; /* Lighter Lavender */
+            --secondary-color: #e5b0e5; /* Softer Plum */
+            --accent-color: #ffcdd2; /* Softer Pink Accent */
+            --text-color: #5c2e7e; /* Slightly softer purple text */
+            --heading-color: #a16aa1; /* Muted Plum for headings */
+            --correct-color: #c8e6c9; /* Softer Green */
+            --incorrect-color: #ffcdd2; /* Softer Red (same as accent) */
+            --game-buy-color: #a7d7f2; /* Softer Sky Blue */
+            --game-sell-color: #f7a1a1; /* Softer Coral */
+            --game-action-color: #cbaacb; /* Muted purple for start/pause */
+            --font-primary: 'Nunito', sans-serif;
+            --font-headings: 'Fredoka One', cursive; /* Cute, bold heading font */
+            /* Glassmorphism Variables */
+            --glass-bg: rgba(244, 232, 252, 0.6); /* Semi-transparent primary color */
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-blur: 8px; /* Adjusted blur amount */
+            /* SVG Colors */
+            --svg-fill-primary: var(--secondary-color);
+            --svg-fill-secondary: var(--accent-color);
+            --svg-stroke: var(--text-color);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            /* Soft diagonal lines pattern - essential for glass effect */
+            background-image: linear-gradient(45deg, rgba(229, 176, 229, 0.1) 25%, transparent 25%),
+                              linear-gradient(-45deg, rgba(229, 176, 229, 0.1) 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, rgba(229, 176, 229, 0.1) 75%),
+                              linear-gradient(-45deg, transparent 75%, rgba(229, 176, 229, 0.1) 75%);
+            background-size: 30px 30px; /* Slightly larger pattern */
+        }
+
+        .course-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent container */
+            padding: 30px 40px;
+            border-radius: 30px;
+            box-shadow: 0 12px 30px rgba(161, 106, 161, 0.15);
+            max-width: 750px;
+            width: 100%;
+            border: 2px solid var(--glass-border); /* Subtle border */
+            position: relative;
+            margin: 20px 0;
+            /* Add backdrop filter to container as well for layered effect */
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+            border-bottom: 2px dashed var(--secondary-color);
+            padding-bottom: 25px;
+        }
+
+        header h1 {
+            font-family: var(--font-headings);
+            color: var(--heading-color);
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        .module {
+            /* Glassmorphism for Modules */
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 20px rgba(92, 46, 126, 0.1); /* Adjusted shadow */
+
+            padding: 30px;
+            margin-bottom: 35px;
+            border-radius: 20px;
+            display: none; /* Hide by default, shown by JS */
+        }
+        .module:first-of-type {
+             display: block; /* Show first module initially */
+        }
+
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(161, 106, 161, 0.3);
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .module-header h2 {
+            font-family: var(--font-headings);
+            color: var(--heading-color);
+            margin: 0;
+            font-size: 1.8em;
+            flex-grow: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .stamp {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95em;
+            display: inline-block;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            border: 2px dotted rgba(255, 255, 255, 0.7); /* Dotted white border */
+            white-space: nowrap;
+            font-family: var(--font-headings);
+        }
+
+        .content p, .content ul {
+            line-height: 1.8;
+            margin-bottom: 18px;
+            font-size: 1.1em;
+            font-weight: 400;
+            /* Ensure text is readable on glass */
+            color: var(--text-color);
+        }
+        .content ul {
+            padding-left: 30px;
+        }
+        .content li {
+            margin-bottom: 10px;
+        }
+        .content strong {
+            font-weight: 700;
+            color: var(--heading-color);
+        }
+
+        .cute-image { /* Style for the container holding the SVG */
+            display: block;
+            max-width: 180px; /* Control max size */
+            height: auto; /* Maintain aspect ratio */
+            margin: 25px auto;
+            padding: 10px; /* Padding around SVG */
+            background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent bg */
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .cute-image svg { /* Style for the SVG element itself */
+             display: block; /* Remove extra space below */
+             width: 100%; /* Make SVG fill container */
+             height: auto; /* Maintain aspect ratio */
+             max-height: 140px; /* Limit SVG height */
+        }
+
+
+        .quiz, .game-container {
+            /* Glassmorphism for inner containers */
+            background: rgba(255, 255, 255, 0.6); /* Slightly different transparency */
+            backdrop-filter: blur(calc(var(--glass-blur) / 2)); /* Less blur than module */
+            -webkit-backdrop-filter: blur(calc(var(--glass-blur) / 2));
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 10px rgba(92, 46, 126, 0.05); /* Softer shadow */
+
+            padding: 25px;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+
+        .quiz h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--heading-color);
+            font-size: 1.2em;
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent buttons */
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-family: var(--font-primary);
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            background-color: rgba(244, 232, 252, 0.8); /* Transparent primary on hover */
+            transform: translateY(-2px);
+            border-color: var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        .quiz-option:disabled {
+             opacity: 0.7;
+             cursor: not-allowed;
+             background-color: rgba(230, 230, 230, 0.5); /* More glassy disabled look */
+        }
+
+        .quiz-option.correct {
+            background-color: rgba(200, 230, 201, 0.8); /* Transparent correct */
+            border-color: #5aa15d;
+            color: #2e7d32;
+            font-weight: 700;
+        }
+
+        .quiz-option.incorrect {
+            background-color: rgba(255, 205, 210, 0.8); /* Transparent incorrect */
+            border-color: #d32f2f;
+            color: #c62828;
+        }
+
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            min-height: 1.3em;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .feedback.correct { color: #2e7d32; }
+        .feedback.incorrect { color: #c62828; }
+
+        /* --- Game Styles --- */
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+            margin-bottom: 25px;
+            background-color: rgba(253, 253, 255, 0.7); /* Glassy chart bg */
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid var(--glass-border);
+        }
+        #stockChart {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: rgba(244, 232, 252, 0.7); /* Glassy stats bg */
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat {
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+        .stat span {
+            font-weight: 700;
+            display: block;
+            font-size: 1.3em;
+            color: var(--text-color);
+            margin-top: 4px;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .game-button {
+            padding: 12px 22px;
+            font-family: var(--font-primary);
+            font-size: 1em;
+            font-weight: 700;
+            border: none; /* Remove border for solid color buttons */
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+            min-width: 110px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            /* Add a subtle border for definition against glass */
+             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .game-button i { font-size: 1.1em; }
+
+        /* Button colors */
+        .game-button.buy { background-color: var(--game-buy-color); color: #1f4f6b; }
+        .game-button.sell { background-color: var(--game-sell-color); color: #7c2e2e; }
+        .game-button.start { background-color: #a5d6a7; color: #2e7d32; }
+        .game-button.pause { background-color: #ffcc80; color: #e65100; }
+        .game-button.reset { background-color: var(--game-action-color); color: #4b0082; }
+
+        .game-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            filter: brightness(1.08); /* Slightly more brightness */
+        }
+        .game-button:active:not(:disabled) {
+             transform: translateY(-1px);
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .game-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            filter: grayscale(60%);
+            background-color: rgba(200, 200, 200, 0.5); /* Glassy disabled */
+            color: rgba(50, 50, 50, 0.5);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-status {
+            text-align: center;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin-bottom: 15px;
+            min-height: 1.2em;
+        }
+        .game-status .running { color: #2e7d32; }
+        .game-status .paused { color: #e65100; }
+        .game-status .over { color: #c62828; font-weight: 700;}
+
+
+        .game-message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            min-height: 1.2em;
+            color: var(--text-color);
+            font-size: 1.05em;
+        }
+        /* --- End Game Styles --- */
+
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .navigation button {
+            padding: 14px 30px;
+            font-family: var(--font-headings);
+            font-size: 1.1em;
+            font-weight: 400;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background-color: var(--secondary-color);
+            color: white;
+            transition: all 0.25s ease;
+            box-shadow: 0 5px 10px rgba(92, 46, 126, 0.15);
+            flex-grow: 1;
+            text-align: center;
+            min-width: 140px;
+             /* Add subtle border for definition */
+             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navigation button:hover:not(:disabled) {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            transform: translateY(-3px);
+             box-shadow: 0 7px 14px rgba(92, 46, 126, 0.2);
+        }
+
+        .navigation button:disabled {
+            background-color: rgba(224, 224, 224, 0.7); /* Glassy disabled */
+            color: rgba(160, 160, 160, 0.8);
+            cursor: not-allowed;
+            opacity: 0.8;
+            transform: none;
+            box-shadow: none;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 45px;
+            padding-top: 25px;
+            border-top: 2px dashed var(--secondary-color);
+            font-style: italic;
+            color: var(--secondary-color);
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            .course-container { padding: 20px 15px; }
+            header h1 { font-size: 2.2em; }
+            .module-header h2 { font-size: 1.5em; }
+            .navigation button { width: 100%; margin-bottom: 10px; }
+            .navigation { justify-content: center; }
+            .game-stats { grid-template-columns: 1fr 1fr; }
+            .game-controls { gap: 10px; }
+            .game-button { padding: 10px 18px; font-size: 0.95em; min-width: 90px; }
+        }
+         @media (max-width: 400px) {
+             .game-stats { grid-template-columns: 1fr; }
+             .game-controls { flex-direction: column; align-items: center; }
+             .game-button { width: 90%; }
+         }
+
+    </style>
+</head>
+<body>
+
+    <div class="course-container">
+        <header>
+            <h1>💖 Investing Adventures for Divi! 💖</h1>
+            <p>Let's learn about the stock market together!</p>
+        </header>
+
+        <div class="module" id="module1" data-module-index="0">
+            <div class="module-header">
+                <span class="stamp">Module 1</span>
+                <h2>✨ What's a Stock? ✨</h2>
+            </div>
+            <div class="content">
+                <p>Imagine a big company, like a magical bakery that makes yummy cupcakes! 🧁</p>
+                <p>A <strong>stock</strong> is like owning a tiny, tiny slice of that bakery. When you buy a stock, you become a part-owner (called a <strong>shareholder</strong>).</p>
+                <p>If the bakery does really well and makes lots of money selling cupcakes, the value of your tiny slice might go up! If it doesn't do well, the value might go down.</p>
+                <div class="cute-image">
+                    <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
+                        <path d="M5 5 Q 10 0, 15 5 T 25 5 T 35 5 T 45 5 T 55 5 T 65 5 T 75 5 T 85 5 T 95 5 V 55 Q 90 60, 85 55 T 75 55 T 65 55 T 55 55 T 45 55 T 35 55 T 25 55 T 15 55 T 5 55 V 5 Z" fill="var(--primary-color)" stroke-width="1.5" />
+                        <rect x="15" y="15" width="70" height="30" fill="rgba(255, 255, 255, 0.5)" rx="3"/>
+                        <text x="50" y="28" font-family="var(--font-headings)" font-size="6" fill="var(--text-color)" text-anchor="middle">Cupcake Co.</text>
+                        <text x="50" y="38" font-family="var(--font-primary)" font-size="5" fill="var(--text-color)" text-anchor="middle">One Share</text>
+                        <path d="M80 45 Q 82.5 42.5, 85 45 Q 87.5 47.5, 85 50 Q 82.5 52.5, 80 50 Q 77.5 47.5, 80 45 Z" fill="var(--svg-fill-secondary)" stroke="none"/>
+                        <path d="M81 46 L 84 49 M 81 49 L 84 46" stroke="white" stroke-width="0.8"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="quiz">
+                <h4>Quick Question!</h4>
+                <p>What does buying a stock mean?</p>
+                <button class="quiz-option" data-answer="a">a) You own a small piece of the company</button>
+                <button class="quiz-option" data-answer="b">b) You get free cupcakes every day</button>
+                <button class="quiz-option" data-answer="c">c) You are loaning the company money</button>
+                <p class="feedback" id="feedback0"></p>
+            </div>
+        </div>
+
+        <div class="module" id="module2" data-module-index="1">
+             <div class="module-header">
+                 <span class="stamp">Module 2</span>
+                <h2>🏛️ What's the Stock Market? 🏛️</h2>
+            </div>
+            <div class="content">
+                <p>The <strong>stock market</strong> is like a giant, busy marketplace (think of a super cute farmer's market!) 🍓🌽🥕</p>
+                <p>But instead of fruits and veggies, people buy and sell those tiny slices (stocks) of different companies.</p>
+                <p>It's where buyers meet sellers. Prices go up and down based on how many people want to buy a certain stock versus how many want to sell it (this is called <strong>supply and demand</strong>!).</p>
+                 <div class="cute-image">
+                     <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
+                        <path d="M10 75 H 90" stroke-width="1.5" />
+                        <rect x="15" y="30" width="20" height="45" fill="var(--svg-fill-secondary)" rx="2"/>
+                        <rect x="20" y="40" width="10" height="10" fill="rgba(255, 255, 255, 0.7)" />
+                        <rect x="20" y="55" width="10" height="15" fill="rgba(255, 255, 255, 0.7)" />
+                        <path d="M15 30 L 25 20 L 35 30 Z" fill="var(--svg-fill-secondary)" />
+                        <rect x="40" y="25" width="20" height="50" fill="var(--svg-fill-primary)" rx="2"/>
+                        <rect x="45" y="35" width="10" height="10" fill="rgba(255, 255, 255, 0.7)" />
+                        <rect x="45" y="50" width="10" height="10" fill="rgba(255, 255, 255, 0.7)" />
+                        <rect x="45" y="65" width="10" height="5" fill="rgba(255, 255, 255, 0.7)" />
+                        <rect x="65" y="35" width="20" height="40" fill="var(--svg-fill-secondary)" rx="2"/>
+                        <rect x="70" y="45" width="10" height="25" fill="rgba(255, 255, 255, 0.7)" />
+                        <path d="M65 35 L 75 25 L 85 35 Z" fill="var(--svg-fill-secondary)" />
+                        <path d="M30 15 L 35 10 L 40 15" stroke="green" stroke-width="1.5" />
+                        <path d="M35 10 V 25" stroke="green" stroke-width="1.5"/>
+                        <path d="M60 15 L 55 10 L 50 15" stroke="red" stroke-width="1.5" />
+                        <path d="M55 10 V 25" stroke="red" stroke-width="1.5"/>
+                     </svg>
+                 </div>
+            </div>
+             <div class="quiz">
+                <h4>Quick Question!</h4>
+                <p>The stock market is mainly a place to:</p>
+                <button class="quiz-option" data-answer="a">a) Buy fresh vegetables</button>
+                <button class="quiz-option" data-answer="b">b) Buy and sell shares of companies</button>
+                <button class="quiz-option" data-answer="c">c) Get financial advice for free</button>
+                <p class="feedback" id="feedback1"></p>
+            </div>
+        </div>
+
+        <div class="module" id="module3" data-module-index="2">
+             <div class="module-header">
+                 <span class="stamp">Module 3</span>
+                <h2>💖 Why Invest? 💖</h2>
+            </div>
+            <div class="content">
+                <p>Investing isn't just about numbers; it's about making your money grow over time, like planting a seed and watching it become a beautiful flower! 🌸</p>
+                <p>Reasons people invest:</p>
+                <ul>
+                    <li><strong>Growth:</strong> To potentially increase their money faster than just saving it.</li>
+                    <li><strong>Goals:</strong> To save for big things like a house, travel, or retirement.</li>
+                    <li><strong>Beat Inflation:</strong> To make sure the money they save keeps its value over time (inflation makes things more expensive).</li>
+                </ul>
+                 <div class="cute-image">
+                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
+                        <path d="M30 90 H 70 L 75 70 H 25 L 30 90 Z" fill="var(--svg-fill-secondary)" stroke-width="1.5"/>
+                        <rect x="20" y="65" width="60" height="5" fill="var(--svg-fill-secondary)" rx="2" stroke-width="1.5"/>
+                        <path d="M27 70 Q 50 65, 73 70" fill="#a0522d" stroke="none"/>
+                        <path d="M50 70 V 30" stroke="#8b4513" stroke-width="3"/>
+                        <ellipse cx="50" cy="25" rx="15" ry="10" fill="#90ee90" transform="rotate(-10 50 25)"/>
+                        <ellipse cx="65" cy="40" rx="12" ry="8" fill="#90ee90" transform="rotate(30 65 40)"/>
+                        <ellipse cx="35" cy="45" rx="14" ry="9" fill="#90ee90" transform="rotate(-40 35 45)"/>
+                        <circle cx="50" cy="25" r="4" fill="gold" stroke="darkgoldenrod" stroke-width="0.5"/>
+                        <text x="50" y="27" font-size="5" text-anchor="middle" fill="#a0522d" font-weight="bold">$</text>
+                     </svg>
+                 </div>
+            </div>
+             <div class="quiz">
+                <h4>Quick Question!</h4>
+                <p>A major reason to invest is to:</p>
+                <button class="quiz-option" data-answer="a">a) Get free stuff from companies</button>
+                <button class="quiz-option" data-answer="b">b) Make your money potentially grow over time</button>
+                <button class="quiz-option" data-answer="c">c) Avoid paying taxes</button>
+                <p class="feedback" id="feedback2"></p>
+            </div>
+        </div>
+
+        <div class="module" id="module4" data-module-index="3">
+             <div class="module-header">
+                 <span class="stamp">Module 4</span>
+                <h2>🎮 Trading Game Time! 🎮</h2>
+            </div>
+            <div class="content">
+                <p>Let's try a simple trading game! You have <strong>$1000</strong> to start. The market runs automatically - try to buy low and sell high!</p>
+                <p>This is just a simulation with a fictional stock called <strong>"Cupcake Co."</strong> 🧁 Watch the graph and make your moves!</p>
+            </div>
+            <div class="game-container">
+                <div class="game-stats">
+                    <div class="stat">Cash <span id="game-cash">$1000.00</span></div>
+                    <div class="stat">Shares <span id="game-shares">0</span></div>
+                    <div class="stat">Cupcake Co. Price <span id="game-price">$10.00</span></div>
+                    <div class="stat">Day <span id="game-day">1</span> / <span id="game-max-days">30</span></div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="stockChart"></canvas>
+                </div>
+
+                 <div class="game-status" id="game-status">Status: Paused</div>
+
+                <div class="game-controls">
+                    <button id="buyBtn" class="game-button buy"><i class="fas fa-shopping-cart"></i> Buy</button>
+                    <button id="sellBtn" class="game-button sell"><i class="fas fa-dollar-sign"></i> Sell</button>
+                    <button id="startBtn" class="game-button start"><i class="fas fa-play"></i> Start</button>
+                    <button id="pauseBtn" class="game-button pause"><i class="fas fa-pause"></i> Pause</button>
+                    <button id="resetBtn" class="game-button reset"><i class="fas fa-undo"></i> Reset</button>
+                </div>
+                 <p class="game-message" id="game-message">Press Start to begin the simulation!</p>
+            </div>
+        </div>
+
+        <div class="navigation">
+             <button id="prevBtn"><i class="fas fa-chevron-left"></i> Previous</button>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <footer>
+             Lots of space... for future learning! ✨
+        </footer>
+
+    </div>
+
+    <script>
+        // === Configuration ===
+        const MAX_GAME_DAYS = 30;
+        const SIMULATION_SPEED_MS = 1500; // Milliseconds per day
+        const INITIAL_CASH = 1000;
+        const INITIAL_PRICE = 10.00;
+        const MIN_PRICE = 0.50; // Minimum stock price
+
+        // === DOM Element References ===
+        // Use const for elements that won't be reassigned
+        const modules = document.querySelectorAll('.module');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        // Game Elements (ensure these IDs match the HTML)
+        const cashDisplay = document.getElementById('game-cash');
+        const sharesDisplay = document.getElementById('game-shares');
+        const priceDisplay = document.getElementById('game-price');
+        const dayDisplay = document.getElementById('game-day');
+        const maxDaysDisplay = document.getElementById('game-max-days');
+        const buyButton = document.getElementById('buyBtn');
+        const sellButton = document.getElementById('sellBtn');
+        const startButton = document.getElementById('startBtn');
+        const pauseButton = document.getElementById('pauseBtn');
+        const resetButton = document.getElementById('resetBtn');
+        const gameStatusDisplay = document.getElementById('game-status');
+        const gameMessage = document.getElementById('game-message');
+        const chartCanvas = document.getElementById('stockChart');
+
+        // === State Variables ===
+        let currentModuleIndex = 0;
+        // Quiz Answers (using 0-based index matching module index)
+        const correctAnswers = { 0: 'a', 1: 'b', 2: 'b' };
+        // Game State
+        let cash = INITIAL_CASH;
+        let shares = 0;
+        let currentPrice = INITIAL_PRICE;
+        let day = 1;
+        let priceHistory = [];
+        let dayLabels = [];
+        let stockChart = null; // Chart.js instance
+        let gameIntervalId = null; // Stores the setInterval ID
+        let isGameRunning = false;
+        let isGameOver = false;
+        let hasGameBeenInitialized = false; // Flag to prevent multiple initializations
+
+
+        // === Core Functions ===
+
+        /**
+         * Shows a specific module by index and hides others.
+         * Updates navigation button states.
+         * @param {number} index - The 0-based index of the module to show.
+         */
+        function showModule(index) {
+            let isGameModule = false;
+            modules.forEach((module, i) => {
+                const shouldShow = (i === index);
+                module.style.display = shouldShow ? 'block' : 'none';
+                // Check if the currently shown module is the game module (index 3)
+                if (shouldShow && parseInt(module.dataset.moduleIndex) === 3) {
+                    isGameModule = true;
+                }
+            });
+
+            // Update navigation button states
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === modules.length - 1;
+
+            // Handle game state based on module visibility
+            if (isGameModule) {
+                // Initialize game only if it hasn't been initialized before OR if it's reset
+                if (!hasGameBeenInitialized || isGameOver) {
+                     initializeGame();
+                } else {
+                    // Ensure chart is drawn if navigating back to an ongoing game
+                    initializeOrUpdateChart();
+                    updateGameDisplay(); // Refresh display state
+                }
+            } else {
+                 // Pause game automatically if navigating away from the game module
+                 pauseGame();
+            }
+
+            // Scroll to the top of the course container for better view
+            // Use setTimeout to allow layout reflow before scrolling
+            setTimeout(() => {
+                const container = document.querySelector('.course-container');
+                if (container) {
+                    // Use 'start' to align to top, 'smooth' for nice animation
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50); // Short delay usually sufficient
+        }
+
+        /**
+         * Navigates to the previous or next module.
+         * @param {number} direction - -1 for previous, 1 for next.
+         */
+        function navigate(direction) {
+            const newIndex = currentModuleIndex + direction;
+            // Check bounds before updating index and showing module
+            if (newIndex >= 0 && newIndex < modules.length) {
+                currentModuleIndex = newIndex;
+                showModule(currentModuleIndex);
+            }
+        }
+
+        /**
+         * Checks the selected answer for a quiz.
+         * This function is now primarily called by the event listener setup in DOMContentLoaded.
+         * @param {number} moduleIndex - The 0-based index of the module/quiz.
+         * @param {string} selectedAnswer - The answer chosen ('a', 'b', 'c').
+         * @param {HTMLElement} buttonElement - The button element that was clicked.
+         */
+        function checkAnswer(moduleIndex, selectedAnswer, buttonElement) {
+            // Find the feedback element specific to this module
+            const feedbackEl = document.getElementById(`feedback${moduleIndex}`);
+            // Ensure the feedback element exists
+            if (!feedbackEl) {
+                console.error(`Feedback element for module index ${moduleIndex} not found.`);
+                return;
+            }
+
+            const correctAnswer = correctAnswers[moduleIndex];
+            // Get all options within the specific quiz container using closest()
+            const quizContainer = buttonElement.closest('.quiz');
+            if (!quizContainer) return; // Should not happen if HTML is correct
+            const quizOptions = quizContainer.querySelectorAll('.quiz-option');
+
+            // Disable all options in this quiz
+            quizOptions.forEach(btn => btn.disabled = true);
+
+            // Reset feedback and button styles
+            feedbackEl.className = 'feedback';
+            buttonElement.classList.remove('correct', 'incorrect');
+
+            // Provide feedback and apply styles
+            if (selectedAnswer === correctAnswer) {
+                feedbackEl.textContent = '💖 Correct! Well done! ✨';
+                feedbackEl.classList.add('correct');
+                buttonElement.classList.add('correct');
+            } else {
+                feedbackEl.textContent = `Oops! The right answer was '${correctAnswer.toUpperCase()}'. Keep learning! ☁️`;
+                feedbackEl.classList.add('incorrect');
+                buttonElement.classList.add('incorrect');
+                // Highlight the correct answer button for clarity
+                 quizOptions.forEach(btn => {
+                    if (btn.dataset.answer === correctAnswer) {
+                        btn.classList.add('correct'); // Highlight the correct one
+                    }
+                });
+            }
+        }
+
+
+        // === Trading Game Functions ===
+
+        /**
+         * Updates the game display elements (cash, shares, price, day, buttons, status).
+         */
+        function updateGameDisplay() {
+            // Check if elements exist before updating to prevent errors
+            if (cashDisplay) cashDisplay.textContent = `$${cash.toFixed(2)}`;
+            if (sharesDisplay) sharesDisplay.textContent = shares;
+            if (priceDisplay) priceDisplay.textContent = `$${currentPrice.toFixed(2)}`;
+            if (dayDisplay) dayDisplay.textContent = day;
+            if (maxDaysDisplay) maxDaysDisplay.textContent = MAX_GAME_DAYS;
+
+            // Update Button States - Ensure buttons exist
+            if (buyButton) buyButton.disabled = cash < currentPrice || !isGameRunning || isGameOver;
+            if (sellButton) sellButton.disabled = shares <= 0 || !isGameRunning || isGameOver;
+            if (startButton) startButton.disabled = isGameRunning || isGameOver;
+            if (pauseButton) pauseButton.disabled = !isGameRunning || isGameOver;
+            if (resetButton) resetButton.disabled = false; // Reset always available
+
+            // Update Status Display - Ensure element exists
+            if (gameStatusDisplay) {
+                if (isGameOver) {
+                    gameStatusDisplay.innerHTML = `<span class="over">Game Over! Final Cash: $${cash.toFixed(2)}</span>`;
+                } else if (isGameRunning) {
+                    gameStatusDisplay.innerHTML = '<span class="running">Status: Running...</span>';
+                } else {
+                    // Initial state or paused state
+                    gameStatusDisplay.innerHTML = '<span class="paused">Status: Paused</span>';
+                }
+            }
+        }
+
+        /**
+         * Sets the message in the game message area.
+         * @param {string} msg - The message to display.
+         */
+        function setMessage(msg) {
+             if (gameMessage) {
+                gameMessage.textContent = msg;
+             }
+        }
+
+        /**
+         * Initializes or updates the stock chart using Chart.js.
+         */
+        function initializeOrUpdateChart() {
+            // Ensure canvas element exists and we can get a context
+            if (!chartCanvas) {
+                console.error("Chart canvas element not found!");
+                return;
+            }
+            const ctx = chartCanvas.getContext('2d');
+            if (!ctx) {
+                console.error("Could not get 2D context for chart canvas.");
+                return;
+            }
+
+            // Define gradient fill (needs to be done after getting context)
+            let gradient = ctx.createLinearGradient(0, 0, 0, chartCanvas.offsetHeight);
+            gradient.addColorStop(0, 'rgba(229, 176, 229, 0.4)');
+            gradient.addColorStop(1, 'rgba(253, 246, 248, 0.1)');
+
+            if (stockChart && stockChart.ctx) { // Check if chart instance exists and is valid
+                // Update existing chart data
+                stockChart.data.labels = dayLabels;
+                stockChart.data.datasets[0].data = priceHistory;
+                // Update chart without animation for performance during simulation
+                stockChart.update('none');
+            } else {
+                // Destroy existing chart instance if it exists but is invalid (e.g., canvas removed/re-added)
+                if(stockChart) {
+                    stockChart.destroy();
+                }
+                // Create new chart instance
+                try {
+                    stockChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dayLabels,
+                            datasets: [{
+                                label: 'Cupcake Co. Stock Price',
+                                data: priceHistory,
+                                borderColor: 'rgb(161, 106, 161)',
+                                backgroundColor: gradient,
+                                pointBackgroundColor: 'rgb(161, 106, 161)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgb(161, 106, 161)',
+                                borderWidth: 2.5,
+                                tension: 0.3,
+                                fill: true,
+                                pointRadius: 0,
+                                pointHoverRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    ticks: { callback: value => '$' + value.toFixed(2), color: 'rgba(92, 46, 126, 0.7)' },
+                                    grid: { color: 'rgba(229, 176, 229, 0.2)' }
+                                },
+                                x: {
+                                    title: { display: false },
+                                    ticks: { color: 'rgba(92, 46, 126, 0.7)', maxTicksLimit: 10 },
+                                    grid: { display: false }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    enabled: true, mode: 'index', intersect: false,
+                                    backgroundColor: 'rgba(92, 46, 126, 0.9)',
+                                    titleFont: { family: 'Nunito', weight: 'bold'}, // Match CSS fonts
+                                    bodyFont: { family: 'Nunito' },
+                                    padding: 10, cornerRadius: 5,
+                                    callbacks: {
+                                        label: context => ` Price: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y)}`
+                                    }
+                                }
+                            },
+                            // Disable animations for performance during simulation updates
+                            animation: false
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error creating chart:", error);
+                    // Handle chart creation error (e.g., display a message)
+                    setMessage("Error: Could not create the chart.");
+                }
+            }
+        }
+
+         /**
+          * Resets the game state to initial values, stops simulation, and updates display/chart.
+          */
+        function resetGame() {
+            // Stop any existing game loop first
+            if (gameIntervalId) {
+                clearInterval(gameIntervalId);
+                gameIntervalId = null;
+            }
+            isGameRunning = false;
+            isGameOver = false;
+
+            // Reset game variables
+            cash = INITIAL_CASH;
+            shares = 0;
+            currentPrice = INITIAL_PRICE;
+            day = 1;
+            priceHistory = [currentPrice]; // Reset history with initial price
+            dayLabels = [day]; // Reset labels with day 1
+
+            setMessage("Game Reset. Press Start to begin!");
+
+            // Update the chart with reset data
+            initializeOrUpdateChart(); // This will handle creating or updating
+
+            // Update the display elements (stats, buttons, status)
+            updateGameDisplay();
+            hasGameBeenInitialized = true; // Mark as initialized after reset
+        }
+
+        /**
+         * Initializes the game fully, usually called on first load of the module or after reset.
+         */
+        function initializeGame() {
+            resetGame(); // Start fresh
+            // No need to call updateGameDisplay or initializeOrUpdateChart here,
+            // as resetGame already handles them.
+        }
+
+        /**
+         * Starts the automatic game simulation interval.
+         */
+        function startGame() {
+            // Prevent starting if already running or game is over
+            if (isGameRunning || isGameOver) return;
+
+            isGameRunning = true;
+            setMessage("Simulation running...");
+            updateGameDisplay(); // Update button states
+
+            // Clear any potentially lingering interval before starting a new one
+            if (gameIntervalId) {
+                clearInterval(gameIntervalId);
+            }
+            // Start the simulation loop
+            gameIntervalId = setInterval(advanceDay, SIMULATION_SPEED_MS);
+        }
+
+        /**
+         * Pauses the automatic game simulation by clearing the interval.
+         */
+        function pauseGame() {
+            // Only pause if the game is actually running
+            if (!isGameRunning) return;
+
+            if (gameIntervalId) {
+                clearInterval(gameIntervalId);
+                gameIntervalId = null; // Clear the interval ID
+            }
+            isGameRunning = false;
+            // Only set message if game is not over
+            if (!isGameOver) {
+                 setMessage("Simulation paused.");
+            }
+            updateGameDisplay(); // Update button states
+        }
+
+
+        /**
+         * Handles buying one share of stock if conditions allow.
+         */
+        function buyStock() {
+            // Check conditions: game running, not over, enough cash
+            if (!isGameRunning || isGameOver || cash < currentPrice) {
+                 if(cash < currentPrice) setMessage("Not enough cash to buy!");
+                 return;
+            }
+
+            cash -= currentPrice;
+            shares += 1;
+            setMessage(`Bought 1 share at $${currentPrice.toFixed(2)}.`);
+            updateGameDisplay(); // Update display immediately
+        }
+
+        /**
+         * Handles selling one share of stock if conditions allow.
+         */
+        function sellStock() {
+             // Check conditions: game running, not over, shares available
+             if (!isGameRunning || isGameOver || shares <= 0) {
+                 if(shares <= 0) setMessage("No shares to sell!");
+                 return;
+             }
+
+            cash += currentPrice;
+            shares -= 1;
+             setMessage(`Sold 1 share at $${currentPrice.toFixed(2)}.`);
+            updateGameDisplay(); // Update display immediately
+        }
+
+        /**
+         * Advances the game by one day: updates price, checks for game over, updates chart/display.
+         * (This function is intended to be called by setInterval).
+         */
+        function advanceDay() {
+            // Check if game should end
+            if (day >= MAX_GAME_DAYS) {
+                 isGameOver = true;
+                 isGameRunning = false;
+                 if (gameIntervalId) {
+                    clearInterval(gameIntervalId); // Stop the interval
+                    gameIntervalId = null;
+                 }
+                 setMessage(`Game Over! Reached Day ${MAX_GAME_DAYS}. Final cash: $${cash.toFixed(2)}`);
+                 updateGameDisplay(); // Update display/buttons for game over state
+                 return; // Stop further execution for this tick
+            }
+
+            // Increment day
+            day += 1;
+
+            // Simulate more 'realistic' price change
+            let volatility = 0.08 + (Math.random() - 0.5) * 0.06;
+            let drift = 0.0005;
+            let randomShock = (Math.random() < 0.05) ? (Math.random() - 0.5) * 0.2 : 0;
+            let changePercent = drift + (Math.random() - 0.5) * volatility + randomShock;
+            let priceChange = currentPrice * changePercent;
+
+            // Update price, ensuring it doesn't go below minimum
+            currentPrice = Math.max(MIN_PRICE, currentPrice + priceChange);
+
+            // Add data for the chart
+            priceHistory.push(currentPrice);
+            dayLabels.push(day);
+
+            // Update chart and display (stats, buttons potentially if price changed buy/sell ability)
+            initializeOrUpdateChart();
+            updateGameDisplay();
+            // No message set here, status display handles "Running..."
+        }
+
+
+        // === Event Listeners and Initialization ===
+
+        // Use DOMContentLoaded to ensure HTML is parsed before attaching listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Navigation Button Listeners ---
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => navigate(-1));
+            } else {
+                console.error("Previous button not found");
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => navigate(1));
+            } else {
+                 console.error("Next button not found");
+            }
+
+            // --- Game Button Listeners ---
+            if (buyButton) {
+                buyButton.addEventListener('click', buyStock);
+            } else {
+                 console.error("Buy button not found");
+            }
+            if (sellButton) {
+                sellButton.addEventListener('click', sellStock);
+            } else {
+                 console.error("Sell button not found");
+            }
+            if (startButton) {
+                startButton.addEventListener('click', startGame);
+            } else {
+                 console.error("Start button not found");
+            }
+            if (pauseButton) {
+                pauseButton.addEventListener('click', pauseGame);
+            } else {
+                 console.error("Pause button not found");
+            }
+            if (resetButton) {
+                // Use initializeGame for reset to ensure clean state
+                resetButton.addEventListener('click', initializeGame);
+            } else {
+                 console.error("Reset button not found");
+            }
+
+             // --- Quiz Button Listeners (Replaces onclick) ---
+             document.querySelectorAll('.quiz-option').forEach(button => {
+                 button.addEventListener('click', function() {
+                     // Find the parent module to get the index
+                     const moduleElement = this.closest('.module');
+                     if (moduleElement && moduleElement.dataset.moduleIndex !== undefined) {
+                         const moduleIndex = parseInt(moduleElement.dataset.moduleIndex);
+                         const answer = this.dataset.answer;
+                         // Call checkAnswer, passing the necessary info
+                         checkAnswer(moduleIndex, answer, this);
+                     } else {
+                         console.error("Could not determine module index for quiz button.");
+                     }
+                 });
+             });
+
+            // --- Initial Setup ---
+            // Show the first module (index 0) on load
+            showModule(currentModuleIndex);
+
+            // Note: Game initialization (resetGame) is called within showModule
+            // when the game module is first displayed, or via the reset button.
+        });
+
+    </script>
+</body>
+</html>
