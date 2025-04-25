@@ -27,13 +27,19 @@
             --font-primary: 'Nunito', sans-serif;
             --font-headings: 'Fredoka One', cursive; /* Cute, bold heading font */
             /* Glassmorphism Variables */
-            --glass-bg: rgba(244, 232, 252, 0.6); /* Semi-transparent primary color */
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --glass-blur: 8px; /* Adjusted blur amount */
+            --glass-bg: rgba(244, 232, 252, 0.65); /* Slightly less transparent */
+            --glass-border: rgba(255, 255, 255, 0.4); /* Slightly more visible border */
+            --glass-blur: 7px; /* Slightly less blur */
             /* SVG Colors */
             --svg-fill-primary: var(--secondary-color);
             --svg-fill-secondary: var(--accent-color);
             --svg-stroke: var(--text-color);
+            /* Chart Colors */
+            --chart-line-color: #a16aa1; /* Muted Plum line */
+            --chart-grid-color: rgba(229, 176, 229, 0.15); /* Fainter grid */
+            --chart-tick-color: rgba(92, 46, 126, 0.6);
+            --chart-fill-top: rgba(229, 176, 229, 0.3);
+            --chart-fill-bottom: rgba(253, 246, 248, 0.05);
         }
 
         *, *::before, *::after {
@@ -58,13 +64,13 @@
         }
 
         .course-container {
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent container */
+            background-color: rgba(255, 255, 255, 0.85); /* More opaque container */
             padding: 30px 40px;
             border-radius: 30px;
             box-shadow: 0 12px 30px rgba(161, 106, 161, 0.15);
             max-width: 750px;
             width: 100%;
-            border: 2px solid var(--glass-border); /* Subtle border */
+            border: 1px solid var(--glass-border); /* Thinner border */
             position: relative;
             margin: 20px 0;
             /* Add backdrop filter to container as well for layered effect */
@@ -154,9 +160,11 @@
         }
         .content ul {
             padding-left: 30px;
+            list-style: '💖 '; /* Cute list bullet */
         }
         .content li {
             margin-bottom: 10px;
+            padding-left: 5px; /* Space after bullet */
         }
         .content strong {
             font-weight: 700;
@@ -184,7 +192,7 @@
 
         .quiz, .game-container {
             /* Glassmorphism for inner containers */
-            background: rgba(255, 255, 255, 0.6); /* Slightly different transparency */
+            background: rgba(255, 255, 255, 0.7); /* More opaque inner containers */
             backdrop-filter: blur(calc(var(--glass-blur) / 2)); /* Less blur than module */
             -webkit-backdrop-filter: blur(calc(var(--glass-blur) / 2));
             border: 1px solid var(--glass-border);
@@ -208,7 +216,7 @@
             width: 100%;
             margin: 10px 0;
             padding: 15px 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent buttons */
+            background-color: rgba(255, 255, 255, 0.85); /* More opaque buttons */
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             cursor: pointer;
@@ -222,7 +230,7 @@
         }
 
         .quiz-option:hover:not(:disabled) {
-            background-color: rgba(244, 232, 252, 0.8); /* Transparent primary on hover */
+            background-color: rgba(244, 232, 252, 0.9); /* More opaque primary on hover */
             transform: translateY(-2px);
             border-color: var(--secondary-color);
             box-shadow: 0 4px 8px rgba(0,0,0,0.08);
@@ -231,18 +239,18 @@
         .quiz-option:disabled {
              opacity: 0.7;
              cursor: not-allowed;
-             background-color: rgba(230, 230, 230, 0.5); /* More glassy disabled look */
+             background-color: rgba(230, 230, 230, 0.6); /* More glassy disabled look */
         }
 
         .quiz-option.correct {
-            background-color: rgba(200, 230, 201, 0.8); /* Transparent correct */
+            background-color: rgba(200, 230, 201, 0.9); /* More opaque correct */
             border-color: #5aa15d;
             color: #2e7d32;
             font-weight: 700;
         }
 
         .quiz-option.incorrect {
-            background-color: rgba(255, 205, 210, 0.8); /* Transparent incorrect */
+            background-color: rgba(255, 205, 210, 0.9); /* More opaque incorrect */
             border-color: #d32f2f;
             color: #c62828;
         }
@@ -266,7 +274,7 @@
             height: 280px;
             width: 100%;
             margin-bottom: 25px;
-            background-color: rgba(253, 253, 255, 0.7); /* Glassy chart bg */
+            background-color: rgba(253, 253, 255, 0.8); /* More opaque chart bg */
             border-radius: 12px;
             padding: 15px;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
@@ -284,7 +292,7 @@
             gap: 15px;
             margin-bottom: 25px;
             padding: 15px;
-            background-color: rgba(244, 232, 252, 0.7); /* Glassy stats bg */
+            background-color: rgba(244, 232, 252, 0.8); /* More opaque stats bg */
             border-radius: 12px;
             border: 1px solid var(--glass-border);
         }
@@ -354,8 +362,8 @@
             transform: none;
             box-shadow: none;
             filter: grayscale(60%);
-            background-color: rgba(200, 200, 200, 0.5); /* Glassy disabled */
-            color: rgba(50, 50, 50, 0.5);
+            background-color: rgba(200, 200, 200, 0.6); /* Glassy disabled */
+            color: rgba(50, 50, 50, 0.6);
              border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -462,18 +470,16 @@
     <div class="course-container">
         <header>
             <h1>💖 Investing Adventures for Divi! 💖</h1>
-            <p>Let's learn about the stock market together!</p>
+            <p>Let's learn about the stock market together, step by step! 💖</p>
         </header>
 
         <div class="module" id="module1" data-module-index="0">
             <div class="module-header">
-                <span class="stamp">Module 1</span>
-                <h2>✨ What's a Stock? ✨</h2>
-            </div>
+                <span class="stamp">Chapter 1</span> <h2>✨ What's a Stocky Stock? ✨</h2> </div>
             <div class="content">
-                <p>Imagine a big company, like a magical bakery that makes yummy cupcakes! 🧁</p>
-                <p>A <strong>stock</strong> is like owning a tiny, tiny slice of that bakery. When you buy a stock, you become a part-owner (called a <strong>shareholder</strong>).</p>
-                <p>If the bakery does really well and makes lots of money selling cupcakes, the value of your tiny slice might go up! If it doesn't do well, the value might go down.</p>
+                <p>Imagine a super popular bakery that makes the *yummiest* cupcakes ever! 🧁 Everyone loves them!</p>
+                <p>A <strong>stock</strong> is like getting a tiny, sparkly ownership badge ✨ for that bakery. When you buy a stock, you become a proud part-owner (we call this a <strong>shareholder</strong>, like sharing the fun!).</p>
+                <p>If the bakery sells tons of cupcakes and becomes even *more* famous, your little badge might become more valuable! Yay! 🎉 But if things slow down, its value might dip a little. It's all part of the adventure!</p>
                 <div class="cute-image">
                     <svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
                         <path d="M5 5 Q 10 0, 15 5 T 25 5 T 35 5 T 45 5 T 55 5 T 65 5 T 75 5 T 85 5 T 95 5 V 55 Q 90 60, 85 55 T 75 55 T 65 55 T 55 55 T 45 55 T 35 55 T 25 55 T 15 55 T 5 55 V 5 Z" fill="var(--primary-color)" stroke-width="1.5" />
@@ -486,24 +492,22 @@
                 </div>
             </div>
             <div class="quiz">
-                <h4>Quick Question!</h4>
-                <p>What does buying a stock mean?</p>
-                <button class="quiz-option" data-answer="a">a) You own a small piece of the company</button>
-                <button class="quiz-option" data-answer="b">b) You get free cupcakes every day</button>
-                <button class="quiz-option" data-answer="c">c) You are loaning the company money</button>
+                <h4>Quick Check! 🧠</h4> <p>What does getting a stock *really* mean?</p>
+                <button class="quiz-option" data-answer="a">a) You own a little piece of the company! Hooray!</button>
+                <button class="quiz-option" data-answer="b">b) You get unlimited free cupcakes (if only! 😉)</button>
+                <button class="quiz-option" data-answer="c">c) You're just giving the company a friendly loan</button>
                 <p class="feedback" id="feedback0"></p>
             </div>
         </div>
 
         <div class="module" id="module2" data-module-index="1">
              <div class="module-header">
-                 <span class="stamp">Module 2</span>
-                <h2>🏛️ What's the Stock Market? 🏛️</h2>
-            </div>
+                 <span class="stamp">Chapter 2</span>
+                <h2>🏛️ The Big Stock Market Party! 🏛️</h2> </div>
             <div class="content">
-                <p>The <strong>stock market</strong> is like a giant, busy marketplace (think of a super cute farmer's market!) 🍓🌽🥕</p>
-                <p>But instead of fruits and veggies, people buy and sell those tiny slices (stocks) of different companies.</p>
-                <p>It's where buyers meet sellers. Prices go up and down based on how many people want to buy a certain stock versus how many want to sell it (this is called <strong>supply and demand</strong>!).</p>
+                <p>The <strong>stock market</strong> is like a huge, bustling party or a super fun farmer's market! 🥳🍓🌽🥕</p>
+                <p>But instead of dancing or buying yummy fruits, people are trading those sparkly ownership badges (stocks!) for all sorts of companies.</p>
+                <p>It's the place where someone wanting to buy a badge meets someone ready to sell theirs. The prices wiggle up and down depending on how many people want to buy versus sell – it's like a popularity contest for badges! This is called <strong>supply and demand</strong>!</p>
                  <div class="cute-image">
                      <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
                         <path d="M10 75 H 90" stroke-width="1.5" />
@@ -526,27 +530,26 @@
                  </div>
             </div>
              <div class="quiz">
-                <h4>Quick Question!</h4>
-                <p>The stock market is mainly a place to:</p>
-                <button class="quiz-option" data-answer="a">a) Buy fresh vegetables</button>
-                <button class="quiz-option" data-answer="b">b) Buy and sell shares of companies</button>
-                <button class="quiz-option" data-answer="c">c) Get financial advice for free</button>
+                <h4>Quick Check! 🧠</h4>
+                <p>What's the main thing happening at the stock market party?</p>
+                <button class="quiz-option" data-answer="a">a) Buying the freshest, cutest veggies</button>
+                <button class="quiz-option" data-answer="b">b) Trading those sparkly company badges (stocks)!</button>
+                <button class="quiz-option" data-answer="c">c) Getting free financial secrets whispered to you</button>
                 <p class="feedback" id="feedback1"></p>
             </div>
         </div>
 
         <div class="module" id="module3" data-module-index="2">
              <div class="module-header">
-                 <span class="stamp">Module 3</span>
-                <h2>💖 Why Invest? 💖</h2>
-            </div>
+                 <span class="stamp">Chapter 3</span>
+                <h2>💖 Why Bother Investing? 💖</h2> </div>
             <div class="content">
-                <p>Investing isn't just about numbers; it's about making your money grow over time, like planting a seed and watching it become a beautiful flower! 🌸</p>
-                <p>Reasons people invest:</p>
+                <p>Investing isn't just boring numbers! Think of it like planting a magic bean 🌱. With a little time and sunshine ☀️, it can grow into something amazing!</p>
+                <p>Why plant these magic beans (invest)?</p>
                 <ul>
-                    <li><strong>Growth:</strong> To potentially increase their money faster than just saving it.</li>
-                    <li><strong>Goals:</strong> To save for big things like a house, travel, or retirement.</li>
-                    <li><strong>Beat Inflation:</strong> To make sure the money they save keeps its value over time (inflation makes things more expensive).</li>
+                    <li><strong>Make it Grow!:</strong> Your money might grow faster than just hiding it under your pillow! 💰➡️🌳</li>
+                    <li><strong>Dream Big!:</strong> Save up for awesome things like a dream vacation ✈️, a cozy home 🏡, or just chilling out later in life.</li>
+                    <li><strong>Beat the Sneaky Inflation Monster!:</strong> Inflation makes things cost more over time (like candy bars! 🍫). Investing helps your money keep its power! 💪</li>
                 </ul>
                  <div class="cute-image">
                      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--svg-stroke)" stroke-width="1">
@@ -563,29 +566,27 @@
                  </div>
             </div>
              <div class="quiz">
-                <h4>Quick Question!</h4>
-                <p>A major reason to invest is to:</p>
-                <button class="quiz-option" data-answer="a">a) Get free stuff from companies</button>
-                <button class="quiz-option" data-answer="b">b) Make your money potentially grow over time</button>
-                <button class="quiz-option" data-answer="c">c) Avoid paying taxes</button>
+                <h4>Quick Check! 🧠</h4>
+                <p>What's a super cool reason to invest?</p>
+                <button class="quiz-option" data-answer="a">a) Companies send you free gifts all the time!</button>
+                <button class="quiz-option" data-answer="b">b) To help your money grow bigger and stronger over time!</button>
+                <button class="quiz-option" data-answer="c">c) To magically make taxes disappear (nope!)</button>
                 <p class="feedback" id="feedback2"></p>
             </div>
         </div>
 
         <div class="module" id="module4" data-module-index="3">
              <div class="module-header">
-                 <span class="stamp">Module 4</span>
-                <h2>🎮 Trading Game Time! 🎮</h2>
-            </div>
+                 <span class="stamp">Chapter 4</span>
+                <h2>🎮 Stock Market Rollercoaster! 🎢</h2> </div>
             <div class="content">
-                <p>Let's try a simple trading game! You have <strong>$1000</strong> to start. The market runs automatically - try to buy low and sell high!</p>
-                <p>This is just a simulation with a fictional stock called <strong>"Cupcake Co."</strong> 🧁 Watch the graph and make your moves!</p>
+                <p>Ready for a challenge? Let's try the trading game! You start with <strong>$1000</strong> magic dollars.</p>
+                <p>The <strong>"Cupcake Co."</strong> 🧁 stock price will now wiggle around more, a bit like real life! It has good days and bad days, and sometimes follows trends. Watch the chart closely! 👀</p>
+                <p>Your mission: Try to <strong>Buy Low</strong> and <strong>Sell High</strong>! Can you grow your magic cash? Let's find out!</p>
             </div>
             <div class="game-container">
                 <div class="game-stats">
-                    <div class="stat">Cash <span id="game-cash">$1000.00</span></div>
-                    <div class="stat">Shares <span id="game-shares">0</span></div>
-                    <div class="stat">Cupcake Co. Price <span id="game-price">$10.00</span></div>
+                    <div class="stat">Magic Cash <span id="game-cash">$1000.00</span></div> <div class="stat">Badges <span id="game-shares">0</span></div> <div class="stat">Cupcake Co. Price <span id="game-price">$10.00</span></div>
                     <div class="stat">Day <span id="game-day">1</span> / <span id="game-max-days">30</span></div>
                 </div>
 
@@ -593,26 +594,18 @@
                     <canvas id="stockChart"></canvas>
                 </div>
 
-                 <div class="game-status" id="game-status">Status: Paused</div>
-
-                <div class="game-controls">
-                    <button id="buyBtn" class="game-button buy"><i class="fas fa-shopping-cart"></i> Buy</button>
-                    <button id="sellBtn" class="game-button sell"><i class="fas fa-dollar-sign"></i> Sell</button>
-                    <button id="startBtn" class="game-button start"><i class="fas fa-play"></i> Start</button>
+                 <div class="game-status" id="game-status">Status: Ready to Play!</div> <div class="game-controls">
+                    <button id="buyBtn" class="game-button buy"><i class="fas fa-shopping-cart"></i> Buy Badge</button> <button id="sellBtn" class="game-button sell"><i class="fas fa-dollar-sign"></i> Sell Badge</button> <button id="startBtn" class="game-button start"><i class="fas fa-play"></i> Start!</button>
                     <button id="pauseBtn" class="game-button pause"><i class="fas fa-pause"></i> Pause</button>
-                    <button id="resetBtn" class="game-button reset"><i class="fas fa-undo"></i> Reset</button>
-                </div>
-                 <p class="game-message" id="game-message">Press Start to begin the simulation!</p>
-            </div>
+                    <button id="resetBtn" class="game-button reset"><i class="fas fa-undo"></i> Reset Game</button> </div>
+                 <p class="game-message" id="game-message">Hit 'Start!' when you're ready for the adventure!</p> </div>
         </div>
 
         <div class="navigation">
-             <button id="prevBtn"><i class="fas fa-chevron-left"></i> Previous</button>
-            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
-        </div>
+             <button id="prevBtn"><i class="fas fa-chevron-left"></i> Go Back</button> <button id="nextBtn">Next Chapter! <i class="fas fa-chevron-right"></i></button> </div>
 
         <footer>
-             Lots of space... for future learning! ✨
+             More learning adventures coming soon! ✨ Keep exploring!
         </footer>
 
     </div>
@@ -620,17 +613,15 @@
     <script>
         // === Configuration ===
         const MAX_GAME_DAYS = 30;
-        const SIMULATION_SPEED_MS = 1500; // Milliseconds per day
+        const SIMULATION_SPEED_MS = 1400; // Slightly faster simulation
         const INITIAL_CASH = 1000;
         const INITIAL_PRICE = 10.00;
         const MIN_PRICE = 0.50; // Minimum stock price
 
         // === DOM Element References ===
-        // Use const for elements that won't be reassigned
         const modules = document.querySelectorAll('.module');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        // Game Elements (ensure these IDs match the HTML)
         const cashDisplay = document.getElementById('game-cash');
         const sharesDisplay = document.getElementById('game-shares');
         const priceDisplay = document.getElementById('game-price');
@@ -647,77 +638,62 @@
 
         // === State Variables ===
         let currentModuleIndex = 0;
-        // Quiz Answers (using 0-based index matching module index)
         const correctAnswers = { 0: 'a', 1: 'b', 2: 'b' };
-        // Game State
         let cash = INITIAL_CASH;
         let shares = 0;
         let currentPrice = INITIAL_PRICE;
         let day = 1;
         let priceHistory = [];
         let dayLabels = [];
-        let stockChart = null; // Chart.js instance
-        let gameIntervalId = null; // Stores the setInterval ID
+        let stockChart = null;
+        let gameIntervalId = null;
         let isGameRunning = false;
         let isGameOver = false;
-        let hasGameBeenInitialized = false; // Flag to prevent multiple initializations
-
+        let hasGameBeenInitialized = false;
+        let lastPriceChange = 0; // Variable to track momentum
 
         // === Core Functions ===
 
         /**
          * Shows a specific module by index and hides others.
-         * Updates navigation button states.
-         * @param {number} index - The 0-based index of the module to show.
          */
         function showModule(index) {
             let isGameModule = false;
             modules.forEach((module, i) => {
                 const shouldShow = (i === index);
                 module.style.display = shouldShow ? 'block' : 'none';
-                // Check if the currently shown module is the game module (index 3)
                 if (shouldShow && parseInt(module.dataset.moduleIndex) === 3) {
                     isGameModule = true;
                 }
             });
 
-            // Update navigation button states
             if (prevBtn) prevBtn.disabled = index === 0;
             if (nextBtn) nextBtn.disabled = index === modules.length - 1;
 
-            // Handle game state based on module visibility
             if (isGameModule) {
-                // Initialize game only if it hasn't been initialized before OR if it's reset
                 if (!hasGameBeenInitialized || isGameOver) {
                      initializeGame();
                 } else {
-                    // Ensure chart is drawn if navigating back to an ongoing game
                     initializeOrUpdateChart();
-                    updateGameDisplay(); // Refresh display state
+                    updateGameDisplay();
                 }
             } else {
-                 // Pause game automatically if navigating away from the game module
                  pauseGame();
             }
 
-            // Scroll to the top of the course container for better view
-            // Use setTimeout to allow layout reflow before scrolling
             setTimeout(() => {
                 const container = document.querySelector('.course-container');
                 if (container) {
-                    // Use 'start' to align to top, 'smooth' for nice animation
                     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            }, 50); // Short delay usually sufficient
+            }, 50);
         }
 
         /**
          * Navigates to the previous or next module.
-         * @param {number} direction - -1 for previous, 1 for next.
          */
         function navigate(direction) {
             const newIndex = currentModuleIndex + direction;
-            // Check bounds before updating index and showing module
             if (newIndex >= 0 && newIndex < modules.length) {
                 currentModuleIndex = newIndex;
                 showModule(currentModuleIndex);
@@ -726,47 +702,28 @@
 
         /**
          * Checks the selected answer for a quiz.
-         * This function is now primarily called by the event listener setup in DOMContentLoaded.
-         * @param {number} moduleIndex - The 0-based index of the module/quiz.
-         * @param {string} selectedAnswer - The answer chosen ('a', 'b', 'c').
-         * @param {HTMLElement} buttonElement - The button element that was clicked.
          */
         function checkAnswer(moduleIndex, selectedAnswer, buttonElement) {
-            // Find the feedback element specific to this module
             const feedbackEl = document.getElementById(`feedback${moduleIndex}`);
-            // Ensure the feedback element exists
-            if (!feedbackEl) {
-                console.error(`Feedback element for module index ${moduleIndex} not found.`);
-                return;
-            }
-
+            if (!feedbackEl) { console.error(`Feedback element ${moduleIndex} not found.`); return; }
             const correctAnswer = correctAnswers[moduleIndex];
-            // Get all options within the specific quiz container using closest()
             const quizContainer = buttonElement.closest('.quiz');
-            if (!quizContainer) return; // Should not happen if HTML is correct
+            if (!quizContainer) return;
             const quizOptions = quizContainer.querySelectorAll('.quiz-option');
-
-            // Disable all options in this quiz
             quizOptions.forEach(btn => btn.disabled = true);
-
-            // Reset feedback and button styles
             feedbackEl.className = 'feedback';
             buttonElement.classList.remove('correct', 'incorrect');
 
-            // Provide feedback and apply styles
             if (selectedAnswer === correctAnswer) {
-                feedbackEl.textContent = '💖 Correct! Well done! ✨';
+                feedbackEl.textContent = '💖 Correct! You got it! ✨';
                 feedbackEl.classList.add('correct');
                 buttonElement.classList.add('correct');
             } else {
-                feedbackEl.textContent = `Oops! The right answer was '${correctAnswer.toUpperCase()}'. Keep learning! ☁️`;
+                feedbackEl.textContent = `Oopsie! The right answer was '${correctAnswer.toUpperCase()}'. No worries, keep learning! ☁️`;
                 feedbackEl.classList.add('incorrect');
                 buttonElement.classList.add('incorrect');
-                // Highlight the correct answer button for clarity
                  quizOptions.forEach(btn => {
-                    if (btn.dataset.answer === correctAnswer) {
-                        btn.classList.add('correct'); // Highlight the correct one
-                    }
+                    if (btn.dataset.answer === correctAnswer) { btn.classList.add('correct'); }
                 });
             }
         }
@@ -775,97 +732,79 @@
         // === Trading Game Functions ===
 
         /**
-         * Updates the game display elements (cash, shares, price, day, buttons, status).
+         * Updates the game display elements.
          */
         function updateGameDisplay() {
-            // Check if elements exist before updating to prevent errors
             if (cashDisplay) cashDisplay.textContent = `$${cash.toFixed(2)}`;
             if (sharesDisplay) sharesDisplay.textContent = shares;
             if (priceDisplay) priceDisplay.textContent = `$${currentPrice.toFixed(2)}`;
             if (dayDisplay) dayDisplay.textContent = day;
             if (maxDaysDisplay) maxDaysDisplay.textContent = MAX_GAME_DAYS;
 
-            // Update Button States - Ensure buttons exist
             if (buyButton) buyButton.disabled = cash < currentPrice || !isGameRunning || isGameOver;
             if (sellButton) sellButton.disabled = shares <= 0 || !isGameRunning || isGameOver;
             if (startButton) startButton.disabled = isGameRunning || isGameOver;
             if (pauseButton) pauseButton.disabled = !isGameRunning || isGameOver;
-            if (resetButton) resetButton.disabled = false; // Reset always available
+            if (resetButton) resetButton.disabled = false;
 
-            // Update Status Display - Ensure element exists
             if (gameStatusDisplay) {
                 if (isGameOver) {
-                    gameStatusDisplay.innerHTML = `<span class="over">Game Over! Final Cash: $${cash.toFixed(2)}</span>`;
+                    gameStatusDisplay.innerHTML = `<span class="over">Game Over! Final Magic Cash: $${cash.toFixed(2)} ✨</span>`;
                 } else if (isGameRunning) {
-                    gameStatusDisplay.innerHTML = '<span class="running">Status: Running...</span>';
+                    gameStatusDisplay.innerHTML = '<span class="running">Status: Market is Open! ☀️</span>';
                 } else {
-                    // Initial state or paused state
-                    gameStatusDisplay.innerHTML = '<span class="paused">Status: Paused</span>';
+                    gameStatusDisplay.innerHTML = '<span class="paused">Status: Market Paused ⏸️</span>';
                 }
             }
         }
 
         /**
          * Sets the message in the game message area.
-         * @param {string} msg - The message to display.
          */
         function setMessage(msg) {
-             if (gameMessage) {
-                gameMessage.textContent = msg;
-             }
+             if (gameMessage) gameMessage.textContent = msg;
         }
 
         /**
-         * Initializes or updates the stock chart using Chart.js.
+         * Initializes or updates the stock chart.
          */
         function initializeOrUpdateChart() {
-            // Ensure canvas element exists and we can get a context
-            if (!chartCanvas) {
-                console.error("Chart canvas element not found!");
-                return;
-            }
+            if (!chartCanvas) { console.error("Chart canvas not found!"); return; }
             const ctx = chartCanvas.getContext('2d');
-            if (!ctx) {
-                console.error("Could not get 2D context for chart canvas.");
-                return;
-            }
+            if (!ctx) { console.error("Could not get 2D context."); return; }
 
-            // Define gradient fill (needs to be done after getting context)
             let gradient = ctx.createLinearGradient(0, 0, 0, chartCanvas.offsetHeight);
-            gradient.addColorStop(0, 'rgba(229, 176, 229, 0.4)');
-            gradient.addColorStop(1, 'rgba(253, 246, 248, 0.1)');
+            gradient.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue('--chart-fill-top').trim());
+            gradient.addColorStop(1, getComputedStyle(document.documentElement).getPropertyValue('--chart-fill-bottom').trim());
+            const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-line-color').trim();
+            const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-grid-color').trim();
+            const tickColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-tick-color').trim();
 
-            if (stockChart && stockChart.ctx) { // Check if chart instance exists and is valid
-                // Update existing chart data
+            if (stockChart && stockChart.ctx) {
                 stockChart.data.labels = dayLabels;
                 stockChart.data.datasets[0].data = priceHistory;
-                // Update chart without animation for performance during simulation
                 stockChart.update('none');
             } else {
-                // Destroy existing chart instance if it exists but is invalid (e.g., canvas removed/re-added)
-                if(stockChart) {
-                    stockChart.destroy();
-                }
-                // Create new chart instance
+                if(stockChart) stockChart.destroy();
                 try {
                     stockChart = new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: dayLabels,
                             datasets: [{
-                                label: 'Cupcake Co. Stock Price',
+                                label: 'Cupcake Co. Price',
                                 data: priceHistory,
-                                borderColor: 'rgb(161, 106, 161)',
+                                borderColor: lineColor,
                                 backgroundColor: gradient,
-                                pointBackgroundColor: 'rgb(161, 106, 161)',
+                                pointBackgroundColor: lineColor,
                                 pointBorderColor: '#fff',
                                 pointHoverBackgroundColor: '#fff',
-                                pointHoverBorderColor: 'rgb(161, 106, 161)',
+                                pointHoverBorderColor: lineColor,
                                 borderWidth: 2.5,
-                                tension: 0.3,
+                                tension: 0.3, // Smoother curve
                                 fill: true,
-                                pointRadius: 0,
-                                pointHoverRadius: 5
+                                pointRadius: 0, // Hide points
+                                pointHoverRadius: 5 // Show on hover
                             }]
                         },
                         options: {
@@ -874,13 +813,13 @@
                             scales: {
                                 y: {
                                     beginAtZero: false,
-                                    ticks: { callback: value => '$' + value.toFixed(2), color: 'rgba(92, 46, 126, 0.7)' },
-                                    grid: { color: 'rgba(229, 176, 229, 0.2)' }
+                                    ticks: { callback: value => '$' + value.toFixed(2), color: tickColor, padding: 5 },
+                                    grid: { color: gridColor, drawBorder: false } // Fainter grid, no border
                                 },
                                 x: {
                                     title: { display: false },
-                                    ticks: { color: 'rgba(92, 46, 126, 0.7)', maxTicksLimit: 10 },
-                                    grid: { display: false }
+                                    ticks: { color: tickColor, maxTicksLimit: 8, padding: 5 }, // Fewer ticks
+                                    grid: { display: false } // No vertical grid
                                 }
                             },
                             plugins: {
@@ -888,7 +827,7 @@
                                 tooltip: {
                                     enabled: true, mode: 'index', intersect: false,
                                     backgroundColor: 'rgba(92, 46, 126, 0.9)',
-                                    titleFont: { family: 'Nunito', weight: 'bold'}, // Match CSS fonts
+                                    titleFont: { family: 'Nunito', weight: 'bold'},
                                     bodyFont: { family: 'Nunito' },
                                     padding: 10, cornerRadius: 5,
                                     callbacks: {
@@ -896,223 +835,156 @@
                                     }
                                 }
                             },
-                            // Disable animations for performance during simulation updates
-                            animation: false
+                            animation: false // No animation during updates
                         }
                     });
                 } catch (error) {
                     console.error("Error creating chart:", error);
-                    // Handle chart creation error (e.g., display a message)
-                    setMessage("Error: Could not create the chart.");
+                    setMessage("Oh no! The chart drawing machine is sleepy. 😴");
                 }
             }
         }
 
          /**
-          * Resets the game state to initial values, stops simulation, and updates display/chart.
+          * Resets the game state.
           */
         function resetGame() {
-            // Stop any existing game loop first
-            if (gameIntervalId) {
-                clearInterval(gameIntervalId);
-                gameIntervalId = null;
-            }
+            if (gameIntervalId) clearInterval(gameIntervalId);
+            gameIntervalId = null;
             isGameRunning = false;
             isGameOver = false;
-
-            // Reset game variables
             cash = INITIAL_CASH;
             shares = 0;
             currentPrice = INITIAL_PRICE;
             day = 1;
-            priceHistory = [currentPrice]; // Reset history with initial price
-            dayLabels = [day]; // Reset labels with day 1
-
-            setMessage("Game Reset. Press Start to begin!");
-
-            // Update the chart with reset data
-            initializeOrUpdateChart(); // This will handle creating or updating
-
-            // Update the display elements (stats, buttons, status)
+            lastPriceChange = 0; // Reset momentum
+            priceHistory = [currentPrice];
+            dayLabels = [day];
+            setMessage("Game Reset! Ready for another round? Press Start! ✨");
+            initializeOrUpdateChart();
             updateGameDisplay();
-            hasGameBeenInitialized = true; // Mark as initialized after reset
+            hasGameBeenInitialized = true;
         }
 
         /**
-         * Initializes the game fully, usually called on first load of the module or after reset.
+         * Initializes the game.
          */
         function initializeGame() {
-            resetGame(); // Start fresh
-            // No need to call updateGameDisplay or initializeOrUpdateChart here,
-            // as resetGame already handles them.
+            resetGame();
         }
 
         /**
-         * Starts the automatic game simulation interval.
+         * Starts the game simulation.
          */
         function startGame() {
-            // Prevent starting if already running or game is over
             if (isGameRunning || isGameOver) return;
-
             isGameRunning = true;
-            setMessage("Simulation running...");
-            updateGameDisplay(); // Update button states
-
-            // Clear any potentially lingering interval before starting a new one
-            if (gameIntervalId) {
-                clearInterval(gameIntervalId);
-            }
-            // Start the simulation loop
+            setMessage("Market is buzzing! 🐝 Watch the prices!");
+            updateGameDisplay();
+            if (gameIntervalId) clearInterval(gameIntervalId);
             gameIntervalId = setInterval(advanceDay, SIMULATION_SPEED_MS);
         }
 
         /**
-         * Pauses the automatic game simulation by clearing the interval.
+         * Pauses the game simulation.
          */
         function pauseGame() {
-            // Only pause if the game is actually running
             if (!isGameRunning) return;
-
-            if (gameIntervalId) {
-                clearInterval(gameIntervalId);
-                gameIntervalId = null; // Clear the interval ID
-            }
+            if (gameIntervalId) clearInterval(gameIntervalId);
+            gameIntervalId = null;
             isGameRunning = false;
-            // Only set message if game is not over
-            if (!isGameOver) {
-                 setMessage("Simulation paused.");
-            }
-            updateGameDisplay(); // Update button states
+            if (!isGameOver) setMessage("Taking a little break! ☕ Press Start to resume.");
+            updateGameDisplay();
         }
 
-
         /**
-         * Handles buying one share of stock if conditions allow.
+         * Buys one share.
          */
         function buyStock() {
-            // Check conditions: game running, not over, enough cash
             if (!isGameRunning || isGameOver || cash < currentPrice) {
-                 if(cash < currentPrice) setMessage("Not enough cash to buy!");
+                 if(cash < currentPrice) setMessage("Oops! Not enough magic cash for that badge! 💰");
                  return;
             }
-
             cash -= currentPrice;
             shares += 1;
-            setMessage(`Bought 1 share at $${currentPrice.toFixed(2)}.`);
-            updateGameDisplay(); // Update display immediately
+            setMessage(`Yay! Bought 1 badge for $${currentPrice.toFixed(2)}! 🛍️`);
+            updateGameDisplay();
         }
 
         /**
-         * Handles selling one share of stock if conditions allow.
+         * Sells one share.
          */
         function sellStock() {
-             // Check conditions: game running, not over, shares available
              if (!isGameRunning || isGameOver || shares <= 0) {
-                 if(shares <= 0) setMessage("No shares to sell!");
+                 if(shares <= 0) setMessage("Uh oh! You don't have any badges to sell! 🤔");
                  return;
              }
-
             cash += currentPrice;
             shares -= 1;
-             setMessage(`Sold 1 share at $${currentPrice.toFixed(2)}.`);
-            updateGameDisplay(); // Update display immediately
+             setMessage(`Cha-ching! Sold 1 badge for $${currentPrice.toFixed(2)}! 💸`);
+            updateGameDisplay();
         }
 
         /**
-         * Advances the game by one day: updates price, checks for game over, updates chart/display.
-         * (This function is intended to be called by setInterval).
+         * Advances the game by one day, updating price and state.
          */
         function advanceDay() {
-            // Check if game should end
             if (day >= MAX_GAME_DAYS) {
                  isGameOver = true;
                  isGameRunning = false;
-                 if (gameIntervalId) {
-                    clearInterval(gameIntervalId); // Stop the interval
-                    gameIntervalId = null;
-                 }
-                 setMessage(`Game Over! Reached Day ${MAX_GAME_DAYS}. Final cash: $${cash.toFixed(2)}`);
-                 updateGameDisplay(); // Update display/buttons for game over state
-                 return; // Stop further execution for this tick
+                 if (gameIntervalId) clearInterval(gameIntervalId);
+                 gameIntervalId = null;
+                 setMessage(`Time's up! 🔔 Game Over! Final magic cash: $${cash.toFixed(2)} ✨`);
+                 updateGameDisplay();
+                 return;
             }
 
-            // Increment day
             day += 1;
 
-            // Simulate more 'realistic' price change
-            let volatility = 0.08 + (Math.random() - 0.5) * 0.06;
-            let drift = 0.0005;
-            let randomShock = (Math.random() < 0.05) ? (Math.random() - 0.5) * 0.2 : 0;
-            let changePercent = drift + (Math.random() - 0.5) * volatility + randomShock;
+            // More dynamic simulation with momentum and slightly higher volatility
+            let baseVolatility = 0.09; // Slightly higher base
+            let momentumFactor = 0.01 * Math.sign(lastPriceChange); // Tendency to continue previous direction
+            let randomVolatility = (Math.random() - 0.5) * 0.07; // Random element to volatility
+            let volatility = baseVolatility + randomVolatility;
+            let drift = 0.0005; // Still a tiny upward drift
+            let randomShock = (Math.random() < 0.06) ? (Math.random() - 0.5) * 0.25 : 0; // Slightly more frequent/impactful shocks
+
+            // Calculate change: base random walk + drift + momentum + shock
+            let changePercent = drift + momentumFactor + (Math.random() - 0.5) * volatility + randomShock;
             let priceChange = currentPrice * changePercent;
 
-            // Update price, ensuring it doesn't go below minimum
+            // Update price, track change for next step's momentum
             currentPrice = Math.max(MIN_PRICE, currentPrice + priceChange);
+            lastPriceChange = priceChange; // Store the actual change amount
 
-            // Add data for the chart
             priceHistory.push(currentPrice);
             dayLabels.push(day);
 
-            // Update chart and display (stats, buttons potentially if price changed buy/sell ability)
             initializeOrUpdateChart();
             updateGameDisplay();
-            // No message set here, status display handles "Running..."
         }
 
 
         // === Event Listeners and Initialization ===
-
-        // Use DOMContentLoaded to ensure HTML is parsed before attaching listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Navigation Button Listeners ---
-            if (prevBtn) {
-                prevBtn.addEventListener('click', () => navigate(-1));
-            } else {
-                console.error("Previous button not found");
-            }
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => navigate(1));
-            } else {
-                 console.error("Next button not found");
-            }
+            // Navigation
+            if (prevBtn) prevBtn.addEventListener('click', () => navigate(-1));
+            if (nextBtn) nextBtn.addEventListener('click', () => navigate(1));
 
-            // --- Game Button Listeners ---
-            if (buyButton) {
-                buyButton.addEventListener('click', buyStock);
-            } else {
-                 console.error("Buy button not found");
-            }
-            if (sellButton) {
-                sellButton.addEventListener('click', sellStock);
-            } else {
-                 console.error("Sell button not found");
-            }
-            if (startButton) {
-                startButton.addEventListener('click', startGame);
-            } else {
-                 console.error("Start button not found");
-            }
-            if (pauseButton) {
-                pauseButton.addEventListener('click', pauseGame);
-            } else {
-                 console.error("Pause button not found");
-            }
-            if (resetButton) {
-                // Use initializeGame for reset to ensure clean state
-                resetButton.addEventListener('click', initializeGame);
-            } else {
-                 console.error("Reset button not found");
-            }
+            // Game Controls
+            if (buyButton) buyButton.addEventListener('click', buyStock);
+            if (sellButton) sellButton.addEventListener('click', sellStock);
+            if (startButton) startButton.addEventListener('click', startGame);
+            if (pauseButton) pauseButton.addEventListener('click', pauseGame);
+            if (resetButton) resetButton.addEventListener('click', initializeGame);
 
-             // --- Quiz Button Listeners (Replaces onclick) ---
-             document.querySelectorAll('.quiz-option').forEach(button => {
+            // Quiz Options
+            document.querySelectorAll('.quiz-option').forEach(button => {
                  button.addEventListener('click', function() {
-                     // Find the parent module to get the index
                      const moduleElement = this.closest('.module');
                      if (moduleElement && moduleElement.dataset.moduleIndex !== undefined) {
                          const moduleIndex = parseInt(moduleElement.dataset.moduleIndex);
                          const answer = this.dataset.answer;
-                         // Call checkAnswer, passing the necessary info
                          checkAnswer(moduleIndex, answer, this);
                      } else {
                          console.error("Could not determine module index for quiz button.");
@@ -1120,12 +992,8 @@
                  });
              });
 
-            // --- Initial Setup ---
-            // Show the first module (index 0) on load
+            // Initial Load
             showModule(currentModuleIndex);
-
-            // Note: Game initialization (resetGame) is called within showModule
-            // when the game module is first displayed, or via the reset button.
         });
 
     </script>
